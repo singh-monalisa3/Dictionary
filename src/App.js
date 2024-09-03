@@ -12,19 +12,22 @@ function App() {
   // State for the search input and the result
   const [searchTerm, setSearchTerm] = useState('');
   const [result, setResult] = useState('');
+  const [found, setFound] = useState(false); // Track if the word was found
 
   // Handle search functionality
   const handleSearch = () => {
     // Convert search term to lowercase for case-insensitive search
     const search = searchTerm.toLowerCase();
     // Find the word in the dictionary
-    const found = dictionary.find(item => item.word.toLowerCase() === search);
+    const foundWord = dictionary.find(item => item.word.toLowerCase() === search);
 
     // Update the result state based on whether the word is found
-    if (found) {
-      setResult(found.meaning);
+    if (foundWord) {
+      setResult(foundWord.meaning);
+      setFound(true);
     } else {
       setResult("Word not found in the dictionary.");
+      setFound(false);
     }
   };
 
@@ -41,10 +44,15 @@ function App() {
         <button onClick={handleSearch}>Search</button>
       </div>
       <div className="result">
-        <p>Definition: {result}</p>
+        {found ? (
+          <p>Definition: {result}</p>
+        ) : (
+          result && <p>{result}</p> // Display only the "Word not found" message if not found
+        )}
       </div>
     </div>
   );
 }
 
 export default App;
+
